@@ -19,7 +19,7 @@ Parameters:
     Description: MongoDB connection URI
   DbName:
     Type: String
-    Description: Database name
+    Description: MongoDB Database name
   JwtSecret:
     Type: String
     Description: JWT secret for token signing
