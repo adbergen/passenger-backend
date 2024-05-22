@@ -1,46 +1,98 @@
-# This is the SAM template that represents the architecture of your serverless application
-# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-template-basics.html
-
-# The AWSTemplateFormatVersion identifies the capabilities of the template
-# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/format-version-structure.html
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
   Start from scratch starter project
 
-# Transform section specifies one or more macros that AWS CloudFormation uses to process your template
-# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html
 Transform: AWS::Serverless-2016-10-31
 
-# Shared configuration for all resources, more in
-# https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    # The PermissionsBoundary allows users to safely develop with their function's permissions constrained
-    # to their current application. All the functions and roles in this application have to include it and
-    # it has to be manually updated when you add resources to your application.
-    # More information in https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html
     PermissionsBoundary: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${AppId}-${AWS::Region}-PermissionsBoundary'
+    Runtime: nodejs18.x
+    MemorySize: 128
+    Timeout: 60
 
 Parameters:
   AppId:
     Type: String
+  MongoDbUri:
+    Type: String
+    Description: MongoDB connection URI
+  DbName:
+    Type: String
+    Description: Database name
+  JwtSecret:
+    Type: String
+    Description: JWT secret for token signing
 
-# Resources declares the AWS resources that you want to include in the stack
-# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
 Resources:
-  # Each Lambda function is defined by properties:
-  # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-
-  # This is a Lambda function config associated with the source code: hello-from-lambda.js
-  helloFromLambdaFunction:
+# User functions
+  LoginFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./
-      Handler: src/handlers/hello-from-lambda.helloFromLambdaHandler
-      Runtime: nodejs18.x
-      MemorySize: 128
-      Timeout: 60
-      Description: A Lambda function that returns a static string.
+      Handler: api/user/login.handler
+      Description: A Lambda function that handles user login.
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          DB_NAME: !Ref DbName
+          JWT_SECRET: !Ref JwtSecret
       Policies:
-        # Give Lambda basic execution Permission to the helloFromLambda
         - AWSLambdaBasicExecutionRole
+
+  SignUpFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: api/user/signUp.handler
+      Description: A Lambda function that handles user sign-up.
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          DB_NAME: !Ref DbName
+          JWT_SECRET: !Ref JwtSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+
+  VerifyTokenFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: api/user/verifyToken.handler
+      Description: A Lambda function that verifies JWT tokens.
+      Environment:
+        Variables:
+          JWT_SECRET: !Ref JwtSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+
+  GetUserDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: api/user/getUserData.handler
+      Description: A Lambda function that retrieves user data.
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          DB_NAME: !Ref DbName
+          JWT_SECRET: !Ref JwtSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+
+Outputs:
+  LoginFunction:
+    Description: "Login Function ARN"
+    Value: !GetAtt LoginFunction.Arn
+
+  SignUpFunction:
+    Description: "SignUp Function ARN"
+    Value: !GetAtt SignUpFunction.Arn
+
+  VerifyTokenFunction:
+    Description: "VerifyToken Function ARN"
+    Value: !GetAtt VerifyTokenFunction.Arn
+
+  GetUserDataFunction:
+    Description: "GetUserData Function ARN"
+    Value: !GetAtt GetUserDataFunction.Arn

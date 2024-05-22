@@ -4,6 +4,9 @@
     "version": "0.0.1",
     "private": true,
     "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "jsonwebtoken": "^9.0.2",
+        "mongodb": "^6.6.2"
     },
     "devDependencies": {
         "jest": "^29.5.0"
