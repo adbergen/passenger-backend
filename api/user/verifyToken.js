@@ -1,17 +1,20 @@
-const { successResponse, errorResponse } = require('../../src/utils/response-helpers');
-const jwt = require('jsonwebtoken');
+const {
+  successResponse,
+  errorResponse
+} = require('../../src/utils/response-helpers')
+const jwt = require('jsonwebtoken')
 
 exports.handler = async (event) => {
   try {
-    const token = event.headers.Authorization;
+    const token = event.headers.Authorization
     if (!token) {
-      return errorResponse('No token provided');
+      return errorResponse('No token provided')
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
-    return successResponse(decoded);
+    return successResponse(decoded)
   } catch (error) {
-    console.error('Error verifying token:', error);
-    return errorResponse('Invalid token');
+    console.error('Error verifying token:', error)
+    return errorResponse('Invalid token')
   }
-};
+}

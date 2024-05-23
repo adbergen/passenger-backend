@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  Start from scratch starter project
+  The backend of Passenger Proximity Chat
 
 Transform: AWS::Serverless-2016-10-31
 
@@ -26,9 +26,9 @@ Parameters:
     Type: AWS::SSM::Parameter::Value<String>
     Default: /JwtSecret
     Description: JWT secret for token signing
-    
+
 Resources:
-# User functions
+  # User functions
   LoginFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -85,17 +85,17 @@ Resources:
 
 Outputs:
   LoginFunction:
-    Description: "Login Function ARN"
+    Description: 'Login Function ARN'
     Value: !GetAtt LoginFunction.Arn
 
   SignUpFunction:
-    Description: "SignUp Function ARN"
+    Description: 'SignUp Function ARN'
     Value: !GetAtt SignUpFunction.Arn
 
   VerifyTokenFunction:
-    Description: "VerifyToken Function ARN"
+    Description: 'VerifyToken Function ARN'
     Value: !GetAtt VerifyTokenFunction.Arn
 
   GetUserDataFunction:
-    Description: "GetUserData Function ARN"
+    Description: 'GetUserData Function ARN'
     Value: !GetAtt GetUserDataFunction.Arn
