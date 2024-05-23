@@ -15,9 +15,11 @@ exports.handler = async (event) => {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const newUser = await collection.insertOne({ username, passwordHash });
+    const result = await collection.insertOne({ username, passwordHash });
 
-    return successResponse(newUser.ops[0]);
+    const newUser = await collection.findOne({ _id: result.insertedId });
+
+    return successResponse(newUser);
   } catch (error) {
     console.error('Error creating user:', error);
     return errorResponse('Internal Server Error');
