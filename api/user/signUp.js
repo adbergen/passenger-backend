@@ -11,23 +11,23 @@ exports.handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false
 
   try {
-    const { username, password } = JSON.parse(event.body)
+    const { email, password } = JSON.parse(event.body)
 
     const db = await connectToDatabase()
     const collection = db.collection('users')
 
-    const existingUser = await collection.findOne({ username })
+    const existingUser = await collection.findOne({ email })
     if (existingUser) {
-      return errorResponse('Username already exists')
+      return errorResponse('Email already exists')
     }
 
     const passwordHash = await bcrypt.hash(password, 10)
-    const result = await collection.insertOne({ username, passwordHash })
+    const result = await collection.insertOne({ email, passwordHash })
 
     const newUser = await collection.findOne({ _id: result.insertedId })
 
     // Automatically log in the user after signup
-    const token = jwt.sign({ username: newUser.username }, jwtSecret, {
+    const token = jwt.sign({ email: newUser.email }, jwtSecret, {
       expiresIn: '1h'
     })
 
