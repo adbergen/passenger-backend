@@ -13,18 +13,18 @@ Globals:
 
 Parameters:
   AppId:
-    Type: String
+    Type: AWS::SSM::Parameter::Value<String>
   MongoDbUri:
-    Type: String
-    Default: !Sub '{{resolve:ssm:/MongoDbUri}}'
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /MongoDbUri
     Description: MongoDB connection URI
   DbName:
-    Type: String
-    Default: !Sub '{{resolve:ssm:/DbName}}'
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /DbName
     Description: MongoDB Database name
   JwtSecret:
-    Type: String
-    Default: !Sub '{{resolve:ssm-secure:/JwtSecret}}'
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /JwtSecret
     Description: JWT secret for token signing
 
 Resources:
