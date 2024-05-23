@@ -13,7 +13,7 @@ Globals:
 
 Parameters:
   AppId:
-    Type: AWS::SSM::Parameter::Value<String>
+    Type: String
   MongoDbUri:
     Type: AWS::SSM::Parameter::Value<String>
     Default: /MongoDbUri
@@ -26,7 +26,7 @@ Parameters:
     Type: AWS::SSM::Parameter::Value<String>
     Default: /JwtSecret
     Description: JWT secret for token signing
-
+    
 Resources:
 # User functions
   LoginFunction:
