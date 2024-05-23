@@ -4,6 +4,7 @@ const getUserDataHandler = require('../../api/user/getUserData');
 const verifyTokenHandler = require('../../api/user/verifyToken');
 
 const routes = [
+  // User routes
   {
     path: "/login",
     method: "post",
@@ -24,6 +25,7 @@ const routes = [
     method: "post",
     handler: verifyTokenHandler,
   },
+  // Conversation routes
 ];
 
 module.exports = routes;
