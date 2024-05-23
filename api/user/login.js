@@ -3,28 +3,28 @@ const { successResponse, errorResponse } = require('../../src/utils/response-hel
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-exports.handler = async (event) => {
+module.exports = async (req, res) => {
   try {
-    const { username, password } = JSON.parse(event.body);
+    const { username, password } = req.body;
 
     const db = await connectToDatabase(process.env.MONGODB_URI);
     const collection = db.collection('users');
 
     const user = await collection.findOne({ username });
     if (!user) {
-      return errorResponse('Invalid username or password');
+      return res.status(401).json(errorResponse('Invalid username or password'));
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordValid) {
-      return errorResponse('Invalid username or password');
+      return res.status(401).json(errorResponse('Invalid username or password'));
     }
 
     const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    return successResponse({ token });
+    return res.status(200).json(successResponse({ token }));
   } catch (error) {
     console.error('Error during login:', error);
-    return errorResponse('Internal Server Error');
+    return res.status(500).json(errorResponse('Internal Server Error'));
   }
 };

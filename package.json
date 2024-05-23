@@ -1,11 +1,12 @@
 {
-    "name": "lambda-from-scratch",
-    "description": "Start from scratch starter project",
+    "name": "passenger-backend",
+    "description": "The backend of Passenger Proximity Chat",
     "version": "0.0.1",
     "private": true,
     "dependencies": {
         "bcryptjs": "^2.4.3",
         "jsonwebtoken": "^9.0.2",
+        "lambda-api": "^1.0.3",
         "mongodb": "^6.6.2"
     },
     "devDependencies": {
