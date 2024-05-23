@@ -2,12 +2,15 @@ const { connectToDatabase } = require('../../src/utils/db-connection');
 const { successResponse, errorResponse } = require('../../src/utils/response-helpers');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { jwtSecret } = require('../../src/config');
 
-exports.handler = async (event) => {
+exports.handler = async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+
   try {
     const { username, password } = JSON.parse(event.body);
 
-    const db = await connectToDatabase(process.env.MONGODB_URI);
+    const db = await connectToDatabase();
     const collection = db.collection('users');
 
     const user = await collection.findOne({ username });
@@ -20,7 +23,7 @@ exports.handler = async (event) => {
       return errorResponse('Invalid username or password');
     }
 
-    const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ username: user.username }, jwtSecret, { expiresIn: '1h' });
 
     return successResponse({ token });
   } catch (error) {
