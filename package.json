@@ -6,7 +6,6 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
-    "lambda-api": "^1.0.3",
     "mongodb": "^6.6.2"
   },
   "devDependencies": {

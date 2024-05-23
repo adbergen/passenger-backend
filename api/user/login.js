@@ -11,22 +11,22 @@ exports.handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false
 
   try {
-    const { username, password } = JSON.parse(event.body)
+    const { email, password } = JSON.parse(event.body)
 
     const db = await connectToDatabase()
     const collection = db.collection('users')
 
-    const user = await collection.findOne({ username })
+    const user = await collection.findOne({ email })
     if (!user) {
-      return errorResponse('Invalid username or password')
+      return errorResponse('Invalid email or password')
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash)
     if (!isPasswordValid) {
-      return errorResponse('Invalid username or password')
+      return errorResponse('Invalid email or password')
     }
 
-    const token = jwt.sign({ username: user.username }, jwtSecret, {
+    const token = jwt.sign({ email: user.email }, jwtSecret, {
       expiresIn: '1h'
     })
 
