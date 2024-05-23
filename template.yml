@@ -16,12 +16,15 @@ Parameters:
     Type: String
   MongoDbUri:
     Type: String
+    Default: !Sub '{{resolve:ssm:/MongoDbUri}}'
     Description: MongoDB connection URI
   DbName:
     Type: String
+    Default: !Sub '{{resolve:ssm:/DbName}}'
     Description: MongoDB Database name
   JwtSecret:
     Type: String
+    Default: !Sub '{{resolve:ssm-secure:/JwtSecret}}'
     Description: JWT secret for token signing
 
 Resources:
