@@ -7,10 +7,11 @@ async function connectToDatabase(uri) {
     return cachedDb;
   }
 
-  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-  const db = client.db(process.env.DB_NAME);
-  cachedDb = db;
-  return db;
+  const client = new MongoClient(uri);
+
+  await client.connect();
+  cachedDb = client.db();
+  return cachedDb;
 }
 
 module.exports = { connectToDatabase };
