@@ -1,5 +1,5 @@
 const api = require('lambda-api')();
-const routes = require('../src/router/router');
+const routes = require('../src/router/routes');
 
 // Load routes
 routes.forEach(route => {
