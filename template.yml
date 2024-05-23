@@ -32,7 +32,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./
-      Handler: api/index.handler
+      Handler: src/router/index.handler
       Description: A Lambda function that acts as a proxy for all routes.
       Environment:
         Variables:
