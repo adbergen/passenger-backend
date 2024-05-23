@@ -8,6 +8,13 @@ routes.forEach(route => {
 
 // Lambda handler
 exports.handler = async (event, context) => {
-  // Run the API router
-  return await api.run(event, context);
+  console.log('Received event:', JSON.stringify(event, null, 2));
+  try {
+    const result = await api.run(event, context);
+    console.log('Response:', JSON.stringify(result, null, 2));
+    return result;
+  } catch (error) {
+    console.error('Error handling request:', error);
+    throw error;
+  }
 };
