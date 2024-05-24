@@ -7,6 +7,7 @@ const { ObjectId } = require('mongodb')
 
 exports.handler = async (event) => {
   try {
+    console.log('Event', event)
     const { id } = event.pathParameters
 
     // Input validation
