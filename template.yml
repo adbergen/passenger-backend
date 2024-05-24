@@ -8,7 +8,7 @@ Globals:
   Function:
     PermissionsBoundary: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${AppId}-${AWS::Region}-PermissionsBoundary'
     Runtime: nodejs18.x
-    MemorySize: 128
+    MemorySize: 256
     Timeout: 60
 
 Parameters:
