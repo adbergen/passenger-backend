@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Location Functions for Passenger Proximity Chat
+
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  UpdateUserLocationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: api/location/updateUserLocation.handler
+      Description: A Lambda function that updates user location.
+      Policies:
+        - AWSLambdaBasicExecutionRole
+
+Outputs:
+  StackArn:
+    Description: 'Location Functions Stack ARN'
+    Value: !Ref AWS::StackId

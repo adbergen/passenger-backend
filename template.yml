@@ -10,6 +10,11 @@ Globals:
     Runtime: nodejs18.x
     MemorySize: 256
     Timeout: 60
+    Environment:
+      Variables:
+        MONGODB_URI: !Ref MongoDbUri
+        DB_NAME: !Ref DbName
+        JWT_SECRET: !Ref JwtSecret
 
 Parameters:
   AppId:
@@ -28,74 +33,21 @@ Parameters:
     Description: JWT secret for token signing
 
 Resources:
-  # User functions
-  LoginFunction:
-    Type: AWS::Serverless::Function
+  UserFunctionsStack:
+    Type: AWS::CloudFormation::Stack
     Properties:
-      CodeUri: ./
-      Handler: api/user/login.handler
-      Description: A Lambda function that handles user login.
-      Environment:
-        Variables:
-          MONGODB_URI: !Ref MongoDbUri
-          DB_NAME: !Ref DbName
-          JWT_SECRET: !Ref JwtSecret
-      Policies:
-        - AWSLambdaBasicExecutionRole
+      TemplateURL: api/user/user-functions.yaml
 
-  SignUpFunction:
-    Type: AWS::Serverless::Function
+  LocationFunctionsStack:
+    Type: AWS::CloudFormation::Stack
     Properties:
-      CodeUri: ./
-      Handler: api/user/signUp.handler
-      Description: A Lambda function that handles user sign-up.
-      Environment:
-        Variables:
-          MONGODB_URI: !Ref MongoDbUri
-          DB_NAME: !Ref DbName
-          JWT_SECRET: !Ref JwtSecret
-      Policies:
-        - AWSLambdaBasicExecutionRole
-
-  VerifyTokenFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: ./
-      Handler: api/user/verifyToken.handler
-      Description: A Lambda function that verifies JWT tokens.
-      Environment:
-        Variables:
-          JWT_SECRET: !Ref JwtSecret
-      Policies:
-        - AWSLambdaBasicExecutionRole
-
-  GetUserDataFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: ./
-      Handler: api/user/getUserData.handler
-      Description: A Lambda function that retrieves user data.
-      Environment:
-        Variables:
-          MONGODB_URI: !Ref MongoDbUri
-          DB_NAME: !Ref DbName
-          JWT_SECRET: !Ref JwtSecret
-      Policies:
-        - AWSLambdaBasicExecutionRole
+      TemplateURL: api/location/location-functions.yaml
 
 Outputs:
-  LoginFunction:
-    Description: 'Login Function ARN'
-    Value: !GetAtt LoginFunction.Arn
+  UserFunctionsStack:
+    Description: 'User Functions Stack ARN'
+    Value: !GetAtt UserFunctionsStack.Outputs.StackArn
 
-  SignUpFunction:
-    Description: 'SignUp Function ARN'
-    Value: !GetAtt SignUpFunction.Arn
-
-  VerifyTokenFunction:
-    Description: 'VerifyToken Function ARN'
-    Value: !GetAtt VerifyTokenFunction.Arn
-
-  GetUserDataFunction:
-    Description: 'GetUserData Function ARN'
-    Value: !GetAtt GetUserDataFunction.Arn
+  LocationFunctionsStack:
+    Description: 'Location Functions Stack ARN'
+    Value: !GetAtt LocationFunctionsStack.Outputs.StackArn
