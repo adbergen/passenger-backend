@@ -10,7 +10,7 @@ Resources:
     Properties:
       Handler: api/user/login.handler
       Runtime: nodejs18.x
-      CodeUri: ./
+      CodeUri: .
       Description: A Lambda function that handles user login.
       Policies:
         - AWSLambdaBasicExecutionRole
@@ -20,7 +20,7 @@ Resources:
     Properties:
       Handler: api/user/signUp.handler
       Runtime: nodejs18.x
-      CodeUri: ./
+      CodeUri: .
       Description: A Lambda function that handles user sign-up.
       Policies:
         - AWSLambdaBasicExecutionRole
@@ -30,7 +30,7 @@ Resources:
     Properties:
       Handler: api/user/verifyToken.handler
       Runtime: nodejs18.x
-      CodeUri: ./
+      CodeUri: .
       Description: A Lambda function that verifies JWT tokens.
       Policies:
         - AWSLambdaBasicExecutionRole
@@ -40,7 +40,7 @@ Resources:
     Properties:
       Handler: api/user/getUserData.handler
       Runtime: nodejs18.x
-      CodeUri: ./
+      CodeUri: .
       Description: A Lambda function that retrieves user data.
       Policies:
         - AWSLambdaBasicExecutionRole
