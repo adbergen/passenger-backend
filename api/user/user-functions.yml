@@ -4,6 +4,14 @@ Description: >-
 
 Transform: AWS::Serverless-2016-10-31
 
+Parameters:
+  MongoDbUri:
+    Type: String
+  DbName:
+    Type: String
+  JwtSecret:
+    Type: String
+
 Resources:
   LoginFunction:
     Type: AWS::Serverless::Function
@@ -12,6 +20,11 @@ Resources:
       Runtime: nodejs18.x
       CodeUri: ../../
       Description: A Lambda function that handles user login.
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          DB_NAME: !Ref DbName
+          JWT_SECRET: !Ref JwtSecret
       Policies:
         - AWSLambdaBasicExecutionRole
 
@@ -22,6 +35,11 @@ Resources:
       Runtime: nodejs18.x
       CodeUri: ../../
       Description: A Lambda function that handles user sign-up.
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          DB_NAME: !Ref DbName
+          JWT_SECRET: !Ref JwtSecret
       Policies:
         - AWSLambdaBasicExecutionRole
 
@@ -32,6 +50,9 @@ Resources:
       Runtime: nodejs18.x
       CodeUri: ../../
       Description: A Lambda function that verifies JWT tokens.
+      Environment:
+        Variables:
+          JWT_SECRET: !Ref JwtSecret
       Policies:
         - AWSLambdaBasicExecutionRole
 
@@ -42,6 +63,11 @@ Resources:
       Runtime: nodejs18.x
       CodeUri: ../../
       Description: A Lambda function that retrieves user data.
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          DB_NAME: !Ref DbName
+          JWT_SECRET: !Ref JwtSecret
       Policies:
         - AWSLambdaBasicExecutionRole
 
