@@ -30,7 +30,7 @@ exports.handler = async (event, context) => {
       expiresIn: '1h'
     })
 
-    return successResponse({ token })
+    return successResponse({ token, userId: user._id });
   } catch (error) {
     console.error('Error during login:', error)
     return errorResponse('Internal Server Error')

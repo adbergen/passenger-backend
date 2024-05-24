@@ -3,13 +3,27 @@ const {
   successResponse,
   errorResponse
 } = require('../../src/utils/response-helpers')
+const { ObjectId } = require('mongodb')
 
 exports.handler = async (event) => {
   try {
-    const db = await connectToDatabase(process.env.MONGODB_URI)
+    const { _id } = JSON.parse(event.body)
+
+    // Input validation
+    if (!_id || !ObjectId.isValid(_id)) {
+      return errorResponse('Invalid user ID')
+    }
+
+    const db = await connectToDatabase()
     const collection = db.collection('users')
-    const userId = event.requestContext.authorizer.claims.sub // Assuming you are using Cognito
-    const user = await collection.findOne({ userId })
+
+    console.time('Find User')
+    const user = await collection.findOne({ _id: _id })
+    console.timeEnd('Find User')
+
+    if (!user) {
+      return errorResponse('User not found')
+    }
 
     return successResponse(user)
   } catch (error) {
