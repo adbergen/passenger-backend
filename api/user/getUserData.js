@@ -7,19 +7,17 @@ const { ObjectId } = require('mongodb')
 
 exports.handler = async (event) => {
   try {
-    const { _id } = JSON.parse(event.body)
+    const { id } = event.pathParameters
 
     // Input validation
-    if (!_id || !ObjectId.isValid(_id)) {
+    if (!id || !ObjectId.isValid(id)) {
       return errorResponse('Invalid user ID')
     }
 
     const db = await connectToDatabase()
     const collection = db.collection('users')
 
-    console.time('Find User')
-    const user = await collection.findOne({ _id: _id })
-    console.timeEnd('Find User')
+    const user = await collection.findOne({ _id: id })
 
     if (!user) {
       return errorResponse('User not found')
