@@ -38,7 +38,7 @@ exports.handler = async (event, context) => {
       expiresIn: '1h'
     })
 
-    return successResponse({ token, userId: newUser._id })
+    return successResponse({ token, _id: newUser._id })
   } catch (error) {
     console.error('Error creating user:', error)
     return errorResponse('Internal Server Error')
