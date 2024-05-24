@@ -18,7 +18,9 @@ exports.handler = async (event) => {
     const db = await connectToDatabase()
     const collection = db.collection('users')
 
-    const user = await collection.findOne({ _id: id })
+    const objectId = ObjectId.createFromHexString(id)
+
+    const user = await collection.findOne({ _id: objectId })
 
     if (!user) {
       return errorResponse('User not found')
