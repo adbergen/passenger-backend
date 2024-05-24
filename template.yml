@@ -36,12 +36,12 @@ Resources:
   UserFunctionsStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: api/user/user-functions.yaml
+      TemplateURL: api/user/user-functions.yml
 
   LocationFunctionsStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: api/location/location-functions.yaml
+      TemplateURL: api/location/location-functions.yml
 
 Outputs:
   UserFunctionsStack:
