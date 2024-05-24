@@ -15,11 +15,6 @@ exports.handler = async (event, context) => {
       event.body
     )
 
-    // Input validation
-    if (!username || !firstName || !lastName || !email || !password) {
-      return errorResponse('All fields are required')
-    }
-
     const db = await connectToDatabase()
     const collection = db.collection('users')
 
@@ -39,14 +34,11 @@ exports.handler = async (event, context) => {
 
     const newUser = await collection.findOne({ _id: result.insertedId })
 
-    // Automatically log in the user after signup
-    const token = jwt.sign(
-      { username: newUser.username, email: newUser.email },
-      jwtSecret,
-      { expiresIn: '1h' }
-    )
+    const token = jwt.sign({ email: newUser.email }, jwtSecret, {
+      expiresIn: '1h'
+    })
 
-    return successResponse({ user: newUser, token })
+    return successResponse({ token, userId: newUser._id })
   } catch (error) {
     console.error('Error creating user:', error)
     return errorResponse('Internal Server Error')
