@@ -15,6 +15,7 @@ async function connectToDatabase() {
 
     await client.connect()
     cachedDb = client.db(dbName)
+    console.log('Connected to database.')
     return cachedDb
   } catch (error) {
     console.error('Error connecting to database:', error)

@@ -20,13 +20,16 @@ exports.handler = async (event, context) => {
     const db = await connectToDatabase()
     const collection = db.collection('users')
 
-    console.log('Connected to database.')
-
-    const user = await collection.findOne({ email })
+    const user = await collection.findOne(
+      { email },
+      { projection: { passwordHash: 1, email: 1 } }
+    )
     if (!user) {
       console.log('User not found.')
       return errorResponse('Invalid email or password')
     }
+
+    console.log('User found, checking password.')
 
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash)
     if (!isPasswordValid) {
@@ -34,11 +37,13 @@ exports.handler = async (event, context) => {
       return errorResponse('Invalid email or password')
     }
 
+    console.log('Password is valid, generating token.')
+
     const token = jwt.sign({ email: user.email }, jwtSecret, {
       expiresIn: '1h'
     })
 
-    console.log('Login successful.')
+    console.log('Login successful, returning response.')
 
     return successResponse({ token, _id: user._id })
   } catch (error) {
