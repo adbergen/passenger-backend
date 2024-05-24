@@ -8,8 +8,9 @@ Resources:
   LoginFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
       Handler: api/user/login.handler
+      Runtime: nodejs18.x
+      CodeUri: ./
       Description: A Lambda function that handles user login.
       Policies:
         - AWSLambdaBasicExecutionRole
@@ -17,8 +18,9 @@ Resources:
   SignUpFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
       Handler: api/user/signUp.handler
+      Runtime: nodejs18.x
+      CodeUri: ./
       Description: A Lambda function that handles user sign-up.
       Policies:
         - AWSLambdaBasicExecutionRole
@@ -26,8 +28,9 @@ Resources:
   VerifyTokenFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
       Handler: api/user/verifyToken.handler
+      Runtime: nodejs18.x
+      CodeUri: ./
       Description: A Lambda function that verifies JWT tokens.
       Policies:
         - AWSLambdaBasicExecutionRole
@@ -35,8 +38,9 @@ Resources:
   GetUserDataFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
       Handler: api/user/getUserData.handler
+      Runtime: nodejs18.x
+      CodeUri: ./
       Description: A Lambda function that retrieves user data.
       Policies:
         - AWSLambdaBasicExecutionRole

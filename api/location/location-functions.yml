@@ -8,8 +8,9 @@ Resources:
   UpdateUserLocationFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
       Handler: api/location/updateUserLocation.handler
+      Runtime: nodejs18.x
+      CodeUri: ./
       Description: A Lambda function that updates user location.
       Policies:
         - AWSLambdaBasicExecutionRole
