@@ -47,6 +47,11 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: api/location/location-functions.yml
+      Parameters:
+        MongoDbUri: !Ref MongoDbUri
+        DbName: !Ref DbName
+        JwtSecret: !Ref JwtSecret
+
 
 Outputs:
   UserFunctionsStack:
