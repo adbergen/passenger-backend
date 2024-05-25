@@ -10,6 +10,8 @@ const { jwtSecret } = require('../../src/config')
 exports.handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false
 
+  const startTime = Date.now()
+
   try {
     console.log('Received event:', JSON.stringify(event, null, 2))
 
@@ -17,13 +19,19 @@ exports.handler = async (event, context) => {
 
     console.log('Parsed payload:', { email, password })
 
+    // Connect to the database
+    const dbConnectStart = Date.now()
     const db = await connectToDatabase()
     const collection = db.collection('users')
+    console.log(`Database connection time: ${Date.now() - dbConnectStart}ms`)
 
+    // Fetch user with only necessary fields
+    const dbQueryStart = Date.now()
     const user = await collection.findOne(
       { email },
       { projection: { passwordHash: 1, email: 1 } }
     )
+    console.log(`Database query time: ${Date.now() - dbQueryStart}ms`)
 
     if (!user) {
       console.log('User not found.')
@@ -32,7 +40,11 @@ exports.handler = async (event, context) => {
 
     console.log('User found, checking password.')
 
+    // Use synchronous bcrypt compare to avoid async overhead
+    const bcryptStart = Date.now()
     const isPasswordValid = bcrypt.compareSync(password, user.passwordHash)
+    console.log(`Bcrypt compare time: ${Date.now() - bcryptStart}ms`)
+
     if (!isPasswordValid) {
       console.log('Invalid password.')
       return errorResponse('Invalid email or password')
@@ -40,11 +52,16 @@ exports.handler = async (event, context) => {
 
     console.log('Password is valid, generating token.')
 
+    // Use synchronous jwt sign to avoid async overhead
+    const jwtStart = Date.now()
     const token = jwt.sign({ email: user.email }, jwtSecret, {
       expiresIn: '1h'
     })
+    console.log(`JWT sign time: ${Date.now() - jwtStart}ms`)
 
     console.log('Login successful, returning response.')
+
+    console.log(`Total function execution time: ${Date.now() - startTime}ms`)
 
     return successResponse({ token, _id: user._id })
   } catch (error) {
