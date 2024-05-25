@@ -40,9 +40,9 @@ exports.handler = async (event, context) => {
 
     console.log('User found, checking password.')
 
-    // Use synchronous bcrypt compare to avoid async overhead
+    // Use asynchronous bcrypt compare
     const bcryptStart = Date.now()
-    const isPasswordValid = bcrypt.compareSync(password, user.passwordHash)
+    const isPasswordValid = await bcrypt.compare(password, user.passwordHash)
     console.log(`Bcrypt compare time: ${Date.now() - bcryptStart}ms`)
 
     if (!isPasswordValid) {
