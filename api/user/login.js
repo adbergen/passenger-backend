@@ -24,6 +24,7 @@ exports.handler = async (event, context) => {
       { email },
       { projection: { passwordHash: 1, email: 1 } }
     )
+
     if (!user) {
       console.log('User not found.')
       return errorResponse('Invalid email or password')
@@ -31,7 +32,7 @@ exports.handler = async (event, context) => {
 
     console.log('User found, checking password.')
 
-    const isPasswordValid = await bcrypt.compare(password, user.passwordHash)
+    const isPasswordValid = bcrypt.compareSync(password, user.passwordHash)
     if (!isPasswordValid) {
       console.log('Invalid password.')
       return errorResponse('Invalid email or password')
