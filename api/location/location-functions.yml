@@ -29,7 +29,31 @@ Resources:
       Policies:
         - AWSLambdaBasicExecutionRole
 
+  GetNearbyUsersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: api/location/getNearbyUsers.handler
+      Runtime: nodejs18.x
+      MemorySize: 256
+      CodeUri: ../../
+      Description: A Lambda function that retrieves nearby users.
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          DB_NAME: !Ref DbName
+          JWT_SECRET: !Ref JwtSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+
 Outputs:
+  UpdateUserLocationFunction:
+    Description: 'UpdateUserLocation Function ARN'
+    Value: !GetAtt UpdateUserLocationFunction.Arn
+
+  GetNearbyUsersFunction:
+    Description: 'GetNearbyUsers Function ARN'
+    Value: !GetAtt GetNearbyUsersFunction.Arn
+
   StackArn:
     Description: 'Location Functions Stack ARN'
     Value: !Ref AWS::StackId
