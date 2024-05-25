@@ -18,6 +18,7 @@ Resources:
     Properties:
       Handler: api/user/login.handler
       Runtime: nodejs18.x
+      MemorySize: 256
       CodeUri: ../../
       Description: A Lambda function that handles user login.
       Environment:
