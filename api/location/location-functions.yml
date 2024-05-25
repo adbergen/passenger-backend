@@ -4,14 +4,28 @@ Description: >-
 
 Transform: AWS::Serverless-2016-10-31
 
+Parameters:
+  MongoDbUri:
+    Type: String
+  DbName:
+    Type: String
+  JwtSecret:
+    Type: String
+
 Resources:
   UpdateUserLocationFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: api/location/updateUserLocation.handler
       Runtime: nodejs18.x
-      CodeUri: ./
+      MemorySize: 256
+      CodeUri: ../../
       Description: A Lambda function that updates user location.
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          DB_NAME: !Ref DbName
+          JWT_SECRET: !Ref JwtSecret
       Policies:
         - AWSLambdaBasicExecutionRole
 
