@@ -7,7 +7,8 @@ const { ObjectId } = require('mongodb')
 
 exports.handler = async (event) => {
   try {
-    const { _id, radius } = event.queryStringParameters
+    const { radius } = event.queryStringParameters
+    const { _id } = JSON.parse(event.body)
 
     if (!_id || !ObjectId.isValid(_id) || !radius) {
       return errorResponse('User ID and radius are required and must be valid')
